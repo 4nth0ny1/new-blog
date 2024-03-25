@@ -1,7 +1,8 @@
 import React from "react";
-import { getPostData, getSortedPostsData } from "@/lib/posts";
+import { getPostData, getSortedPostsData, getHeadings } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { TableOfContents } from "@/app/components/TableOfContents";
 
 export function generateStaticParams() {
   const posts = getSortedPostsData();
@@ -35,9 +36,12 @@ export default async function Post({ params }: { params: { postId: string } }) {
   }
 
   const { title, date, contentHtml } = await getPostData(postId);
+  const headings = await getHeadings(postId);
+  console.log(headings);
 
   return (
     <main className="px-6 prose prose-xl prose-slate dark:prose-invert mx-auto">
+      <TableOfContents nodes={headings} />
       <h1 className="text-3xl mt-4 mb-0">{title}</h1>
       <p className="mt-0">{date}</p>
       <article>
